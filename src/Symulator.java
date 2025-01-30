@@ -4,16 +4,12 @@ import java.util.*;
 public class Symulator {
 
     private static List<Player> players = new ArrayList<>();
-    private static List<Player> winners;
 
     public static void main(String[] args) {
-        // Загрузка игроков
         loadPlayersFromFile("players.txt");
 
-        // Симуляция игры
         simulateGames(100);
 
-        // Генерация отчета
         generateReport();
     }
 
@@ -31,7 +27,7 @@ public class Symulator {
                     Player player = new Player(firstName, lastName, birthYear, birthMonth, birthDay);
                     players.add(player);
                 } else {
-                    System.out.println("Неверный формат строки: " + line);
+                    System.out.println("Invalid string format: " + line);
                 }
             }
         } catch (IOException e) {
@@ -64,9 +60,14 @@ public class Symulator {
         } else {
             writer.println("No players");
         }
-    } catch (IOException e) {
-        e.printStackTrace(); // Обработка исключения
-    }
+        } catch (IOException e) {
+            e.printStackTrace(); 
+        }
+        System.out.println("Sorted by money players:");
+        players.sort(Comparator.comparingInt(Player::getTotalMoney).reversed());
+        for (Player player : players) {
+            System.out.println(player + " - " + player.getTotalMoney());
+        }
 }
 
     private static List<Player> findWinners(List<Player> players) {
