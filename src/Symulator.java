@@ -4,7 +4,7 @@ import java.util.*;
 public class Symulator {
 
     private static List<Player> players = new ArrayList<>();
-    private static Player winner = null;
+    private static List<Player> winners;
 
     public static void main(String[] args) {
         // Загрузка игроков
@@ -52,18 +52,40 @@ public class Symulator {
     }
 
     public static void generateReport() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("report.txt", true))) { 
         if (players.size() > 0) {
-            winner = Collections.max(players, Comparator.comparingInt(Player::getTotalMoney));
-            System.out.println("Победитель: " + winner.getName());
-            System.out.println("Общий призовой фонд: " + winner.getTotalMoney());
-
-            System.out.println("\nИгроки, отсортированные по выигранным деньгам:");
-            players.sort(Comparator.comparingInt(Player::getTotalMoney).reversed());
-            for (Player player : players) {
-                System.out.println(player + " - " + player.getTotalMoney() + " у.е.");
+            List<Player> winners = findWinners(players);
+            int totalMoney = 0;
+            for (Player winner : winners) {
+                writer.println("Winners: " + winner.getName());
+                totalMoney += winner.getTotalMoney();
             }
+            writer.println("Total gain: " + totalMoney);
         } else {
-            System.out.println("Нет игроков для игры.");
+            writer.println("No players");
         }
+    } catch (IOException e) {
+        e.printStackTrace(); // Обработка исключения
+    }
+}
+
+    private static List<Player> findWinners(List<Player> players) {
+        if (players.isEmpty()) {
+            return Collections.emptyList(); 
+        }
+
+        int maxMoney = players.stream()
+                .mapToInt(Player::getTotalMoney)
+                .max()
+                .orElse(0); 
+
+        List<Player> winners = new ArrayList<>();
+        for (Player player : players) {
+            if (player.getTotalMoney() == maxMoney) {
+                winners.add(player);
+            }
+        }
+
+        return winners;
     }
 }

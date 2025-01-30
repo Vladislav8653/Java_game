@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Player {
@@ -37,11 +38,14 @@ public class Player {
     public int getBoxesQuantity() {
         return boxes.size();
     }
-   
 
     public int chooseBox(List<Integer> boxes) {
         Random random = new Random();
         return random.nextInt(boxes.size()); // return random index in bounds [0..size()]
+    }
+
+    public List<Integer> getOpenedBoxes() {
+        return boxes;
     }
 
     @Override
@@ -49,7 +53,29 @@ public class Player {
         return firstName + " " + lastName + " (" + birthYear + "-" + birthMonth + "-" + birthDay + ")";
     }
 
-    public List<Integer> getOpenedBoxes() {
-        return boxes;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Player player = (Player) obj;
+        return birthYear == player.birthYear &&
+               birthMonth == player.birthMonth &&
+               birthDay == player.birthDay &&
+               totalMoney == player.totalMoney &&
+               Objects.equals(firstName, player.firstName) &&
+               Objects.equals(lastName, player.lastName) &&
+               Objects.equals(boxes, player.boxes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, birthYear, birthMonth, birthDay, totalMoney, boxes);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Player cloned = (Player) super.clone();
+        cloned.boxes = new ArrayList<>(this.boxes); 
+        return cloned;
     }
 }
