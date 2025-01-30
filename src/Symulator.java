@@ -2,8 +2,16 @@ import java.io.*;
 import java.util.*;
 
 public class Symulator {
-
     private static List<Player> players = new ArrayList<>();
+    private static Symulator instance;
+    private Symulator() {}
+
+    public static synchronized Symulator getInstance() {
+        if (instance == null) {
+            instance = new Symulator();
+        }
+        return instance;
+    }
 
     public static void main(String[] args) {
         loadPlayersFromFile("players.txt");
@@ -48,7 +56,7 @@ public class Symulator {
     }
 
     public static void generateReport() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("report.txt", true))) { 
+        try (PrintWriter writer = new PrintWriter(new FileWriter("report.txt", false))) { 
         if (players.size() > 0) {
             List<Player> winners = findWinners(players);
             int totalMoney = 0;
@@ -68,7 +76,7 @@ public class Symulator {
         for (Player player : players) {
             System.out.println(player + " - " + player.getTotalMoney());
         }
-}
+    }
 
     private static List<Player> findWinners(List<Player> players) {
         if (players.isEmpty()) {

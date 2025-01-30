@@ -1,10 +1,2 @@
-Winners: Anastazy Wasilewski
-Total gain: 3284
-Winners: Jaroslaw Kolodziej
-Total gain: 2331
-Winners: Emanuel Bak
-Total gain: 2593
-Winners: Denis Baran
-Total gain: 3219
-Winners: Martin Gorecki
-Total gain: 3115
+Winners: Miroslaw Kowalski
+Total gain: 3246
